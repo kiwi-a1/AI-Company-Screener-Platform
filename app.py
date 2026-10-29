@@ -32,7 +32,10 @@ CSS = """
 <style>
 section[data-testid="stSidebar"] { width: 440px !important; }
 section[data-testid="stSidebar"] [data-testid="stChatMessage"] { padding: .5rem .6rem; }
-.block-container { padding-top: 1.2rem; padding-bottom: 2rem; }
+.block-container { padding-top: 3.2rem; padding-bottom: 2rem; }
+header[data-testid="stHeader"] { background: transparent; }
+[data-testid="stToolbar"], [data-testid="stToolbarActions"], [data-testid="stAppDeployButton"],
+[data-testid="stMainMenu"], [data-testid="stStatusWidget"] { display: none !important; }
 .market-header { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap;
   padding:.9rem 1.1rem; border-radius:12px; background:linear-gradient(135deg,#161B26,#1B2333);
   border:1px solid #263043; margin:.4rem 0 .6rem 0; }
@@ -126,6 +129,10 @@ def main() -> None:
             icon="🚫",
         )
     else:
+        if info.get("_partial"):
+            st.warning("Yahoo Finance returned limited data for this company right now (detailed profile and "
+                       "valuation fields were unavailable), so some values show “—”. Use **Refresh** to try again.",
+                       icon="⚠️")
         try:
             page_context = SECTIONS[section].render(symbol, info, info_result) or page_context
         except Exception as exc:  # never let one section take down the app or the chat
